@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>inMemoryData</title>
+    </head>
+    <body>
+        <div class="userdata"></div>
+        <input type="text" name="name" id="userID" value="">
+        <input type="button" name="name" id="get" value="Send Get">
+
+        <script src="jquery.js"></script>
+        <script>
+        //Client
+        var users = [];
+
+        var User = function(data){
+
+            var callingObj = this;
+
+            Object.keys(data).forEach(function(element, index, array){
+                console.log(element,data[element]);
+                callingObj[element] = data[element];
+            })
+        }
+
+        $('#get').click(function(){
+
+            console.log("Get Request", $('#userID').val());
+
+            if ($('#userID').val().length !== 0) {
+                $.get('/' + $('#userID').val())
+                .success(function(data){
+
+                    console.log(data);
+                    var currentUser = new User(data);
+                    console.log(currentUser);
+
+                })
+            }
+        })
+
+        // users[0].giveCredits(10) //both on the server and the client, credits should equal 10;
+
+        </script>
+    </body>
+</html>
