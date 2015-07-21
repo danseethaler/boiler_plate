@@ -8,12 +8,43 @@
         <div class="userdata"></div>
         <input type="text" name="name" id="userID" value="">
         <input type="button" name="name" id="get" value="Send Get">
+        <p class="users"></p>
 
         <script src="jquery.js"></script>
         <script>
-        //Client
-        var users = [];
 
+        $.get('/all').success(function(data){
+            console.log(data);
+        })
+
+        // Selector on element with ID of get.
+        $('#get').click(function(){
+
+            // Check to make sure there is a value in the input field
+            if ($('#userID').val().length !== 0) {
+
+                // log the get request with the parameter we're sending as a query
+                console.log("Get Request", $('#userID').val());
+
+                // Use the jQuery convenience function to send a get request
+                // with the root path and the value of the userID field
+                $.get('/' + $('#userID').val())
+                // On a successful response run the anonymous function with
+                // the data that was returned
+                .success(function(data){
+
+                    // Set the userName variable and call the constructor
+                    // function to create a new user object
+                    var userName = data.name;
+                    var userName = new User(data);
+                    console.log(userName);
+
+                })
+            }
+        })
+
+
+        // User constructor
         var User = function(data){
 
             var callingObj = this;
@@ -23,23 +54,6 @@
                 callingObj[element] = data[element];
             })
         }
-
-        $('#get').click(function(){
-
-            console.log("Get Request", $('#userID').val());
-
-            if ($('#userID').val().length !== 0) {
-                $.get('/' + $('#userID').val())
-                .success(function(data){
-
-                    console.log(data);
-                    var currentUser = new User(data);
-                    console.log(currentUser);
-
-                })
-            }
-        })
-
         // users[0].giveCredits(10) //both on the server and the client, credits should equal 10;
 
         </script>

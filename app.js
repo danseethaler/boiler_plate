@@ -7,9 +7,11 @@ var app = express();
 
 app.use(express.static('static'));
 
-app.get('/:userID',function(req, res){
-
-    var userID = req.params.userID
+// a middleware with no mount path; gets executed for every request to the app
+app.use(function (req, res, next) {
+  console.log('Date:', new Date().toDateString());
+  next();
+});
 
     var users = [
     	{
@@ -34,6 +36,10 @@ app.get('/:userID',function(req, res){
     	}
     ]
 
+app.get('user/:userID',function(req, res){
+
+    var userID = req.params.userID;
+
     for (var i = 0; i < users.length; i++) {
         if (users[i].id === userID) {
             res.send(users[i])
@@ -41,7 +47,12 @@ app.get('/:userID',function(req, res){
         }
     }
 
+})
 
+app.get('/all',function(req,res){
+
+    res.send(users)
+    return;
 })
 
 app.listen(8888);
